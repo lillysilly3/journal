@@ -1,8 +1,11 @@
 import sqlite3
 import bcrypt
+import os
+
+DB_PATH = os.path.join(os.path.dirname(__file__), "journal.db")
 
 def initialize_db():
-    conn = sqlite3.connect("journal.db")
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT, value TEXT)")
     conn.commit()
@@ -10,14 +13,14 @@ def initialize_db():
 
 def set_password(password):
     hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-    conn = sqlite3.connect("journal.db")
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", ("password", hashed))
     conn.commit()
     conn.close()
 
 def check_password(password):
-    conn = sqlite3.connect("journal.db")
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("SELECT value FROM settings WHERE key = ?", ("password",))
     result = cur.fetchone()
@@ -33,7 +36,7 @@ def check_password(password):
         return False
     
 def has_password():
-    conn = sqlite3.connect("journal.db")
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("SELECT value FROM settings WHERE key = ?", ("password",))
     result = cur.fetchone()
@@ -46,14 +49,14 @@ def has_password():
         return True
     
 def save_setting(key, value):
-    conn = sqlite3.connect("journal.db")
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", (key, value))
     conn.commit()
     conn.close()
 
 def get_setting(key):
-    conn = sqlite3.connect("journal.db")
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("SELECT value FROM settings WHERE key = ?", (key,))
     result= cur.fetchone()
@@ -63,4 +66,12 @@ def get_setting(key):
     else:
         conn.close()
         return result[0]
+    
+def reset_db():
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("DELETE FROM settings")
+    conn.commit()
+    conn.close()
+
     

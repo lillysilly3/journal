@@ -7,7 +7,7 @@ class SetupScreen(ctk.CTkFrame):
         self.on_setup_complete = on_setup_complete
 
         #Setup title
-        label = ctk.CTkLabel(self, text="Welcome to your Journal! Create your password", font=ctk.CTkFont(size=18, weight="bold"))
+        label = ctk.CTkLabel(self, text="Welcome to your Journal!\nCreate your password", font=ctk.CTkFont(size=18, weight="bold"))
         label.pack(pady=30)
 
         self.password_entry = ctk.CTkEntry(self, placeholder_text="Enter password", show="", width=200)

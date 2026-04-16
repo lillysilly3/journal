@@ -3,9 +3,10 @@ from database import check_password as db_check_password
 from database import get_setting
 
 class LoginScreen(ctk.CTkFrame):
-    def __init__(self, parent, on_login_success):
+    def __init__(self, parent, on_login_success, on_reset):
         super().__init__(parent)
         self.on_login_success = on_login_success
+        self.on_reset = on_reset
 
         #Title
         label = ctk.CTkLabel(self, text="My Journal", font=ctk.CTkFont(size=24, weight="bold"))
@@ -31,6 +32,9 @@ class LoginScreen(ctk.CTkFrame):
         if hint:
             hint_button.pack(pady=5)
 
+        #Reset button
+        self.reset_button = ctk.CTkButton(self, text="Reset password", command=self.confirm_reset)
+
         #Error message
         self.error_label = ctk.CTkLabel(self, text="", text_color="red")
         self.error_label.pack()
@@ -45,10 +49,26 @@ class LoginScreen(ctk.CTkFrame):
     def show_hint(self):
         hint = get_setting("hint")
         if hint:
-            self.error_label.configure(text=f"Hint: {hint}")
+            if self.error_label.cget("text") == f"Hint: {hint}":
+                self.error_label.configure(text="")
+            else:
+                self.error_label.configure(text=f"Hint: {hint}")
+                self.reset_button.pack(pady=5)
 
     def toggle_password(self):
         if self.show_password_var.get():
             self.password_entry.configure(show="")
         else:
             self.password_entry.configure(show="*")
+
+    def confirm_reset(self):
+        popup = ctk.CTkToplevel(self)
+        popup.title("Reset password")
+        popup.geometry("300x150")
+        
+        ctk.CTkLabel(popup, text="All data will be deleted. Are you sure?").pack(pady=10)
+        
+        button_frame = ctk.CTkFrame(popup)
+        button_frame.pack(pady=10)
+        ctk.CTkButton(button_frame, text="Reset", command=lambda: [self.on_reset(), popup.destroy()]).pack(side="left", padx=10)
+        ctk.CTkButton(button_frame, text="Cancel", command=popup.destroy).pack(side="left", padx=10)
