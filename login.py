@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from database import check_password as db_check_password
+from database import get_setting
 
 class LoginScreen(ctk.CTkFrame):
     def __init__(self, parent, on_login_success):
@@ -20,6 +21,16 @@ class LoginScreen(ctk.CTkFrame):
         self.password_entry.bind("<Return>", lambda event: self.check_password())
         self.password_entry.bind("<space>", lambda event: self.check_password())
 
+        #Show password chekbox
+        self.show_password_var = ctk.BooleanVar()
+        ctk.CTkCheckBox(self, text="Show password", variable=self.show_password_var, command=self.toggle_password).pack(pady=5)
+
+        #Hint button
+        hint_button = ctk.CTkButton(self, text="Forgot password?", command=self.show_hint)
+        hint = get_setting("hint")
+        if hint:
+            hint_button.pack(pady=5)
+
         #Error message
         self.error_label = ctk.CTkLabel(self, text="", text_color="red")
         self.error_label.pack()
@@ -30,3 +41,14 @@ class LoginScreen(ctk.CTkFrame):
             self.on_login_success()
         else:
             self.error_label.configure(text="Wrong password!")
+
+    def show_hint(self):
+        hint = get_setting("hint")
+        if hint:
+            self.error_label.configure(text=f"Hint: {hint}")
+
+    def toggle_password(self):
+        if self.show_password_var.get():
+            self.password_entry.configure(show="")
+        else:
+            self.password_entry.configure(show="*")

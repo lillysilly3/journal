@@ -9,7 +9,7 @@ def initialize_db():
     conn.close()
 
 def set_password(password):
-    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
     conn = sqlite3.connect("journal.db")
     cur = conn.cursor()
     cur.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", ("password", hashed))
@@ -25,7 +25,7 @@ def check_password(password):
     if result is None:
         conn.close()
         return False
-    elif bcrypt.checkpw(password.encode(), result[0]):
+    elif bcrypt.checkpw(password.encode(), result[0].encode()):
         conn.close()
         return True
     else:
@@ -44,4 +44,23 @@ def has_password():
     else:
         conn.close()
         return True
+    
+def save_setting(key, value):
+    conn = sqlite3.connect("journal.db")
+    cur = conn.cursor()
+    cur.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", (key, value))
+    conn.commit()
+    conn.close()
+
+def get_setting(key):
+    conn = sqlite3.connect("journal.db")
+    cur = conn.cursor()
+    cur.execute("SELECT value FROM settings WHERE key = ?", (key,))
+    result= cur.fetchone()
+    if result is None:
+        conn.close()
+        return None
+    else:
+        conn.close()
+        return result[0]
     
