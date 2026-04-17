@@ -19,8 +19,8 @@ class LoginScreen(ctk.CTkFrame):
         #Login button
         button = ctk.CTkButton(self, text="Login", command=self.check_password)
         button.pack(pady=10)
-        self.password_entry.bind("<Return>", lambda event: self.db.check_password())
-        self.password_entry.bind("<space>", lambda event: self.db.check_password())
+        self.password_entry.bind("<Return>", lambda event: self.check_password())
+        self.password_entry.bind("<space>", lambda event: self.check_password())
 
         #Show password chekbox
         self.show_password_var = ctk.BooleanVar()

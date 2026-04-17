@@ -2,9 +2,17 @@ import customtkinter as ctk
 from login import LoginScreen
 from database import DatabaseClient
 from setup import SetupScreen
+from journal import JournalScreen
 
 def on_login_success():
-    print("Logged in!")
+    print("logged in!")
+    global login_screen
+    global app
+    global db
+    login_screen.destroy()
+    journal_screen = JournalScreen(app,db)
+    journal_screen.pack(expand=True, fill="both")
+    app.geometry("900x600")
 
 def on_setup_complete():
     global setup_screen
