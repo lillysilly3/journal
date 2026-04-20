@@ -9,7 +9,8 @@ class DatabaseClient():
         self.conn = sqlite3.connect(DB_PATH)
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS settings (key TEXT, value TEXT)")
-        self.conn.commit()        
+        self.cur.execute("CREATE TABLE IF NOT EXISTS entries (date TEXT, content TEXT, mood TEXT)")
+        self.conn.commit()       
 
     def set_password(self, password):
         hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
@@ -54,4 +55,17 @@ class DatabaseClient():
 
     def close(self):
         self.conn.close()
+
+    def save_entry(self, date, content, mood):
+        self.cur.execute("INSERT OR REPLACE INTO entries (date, content, mood) VALUES (?, ?, ?)", (date, content, mood))
+        self.conn.commit()
+
+    def get_entry(self, date):
+        self.cur.execute("SELECT content, mood FROM entries WHERE date = ?", (date,))
+        result = self.cur.fetchone()
+        if result is None:
+            return None
+        else:
+            return result
     
+

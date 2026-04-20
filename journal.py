@@ -1,12 +1,15 @@
 import customtkinter as ctk
 import datetime
 from database import DatabaseClient
-import calendar
+from calendar_widget import CalendarWidget
+from moods import MOODS
 
 class JournalScreen(ctk.CTkFrame):
     def __init__(self, parent, db: DatabaseClient):
         super().__init__(parent)
         self.db = db
+        self.current_mood = ""
+
 
         #Grid
         self.grid_columnconfigure(0, weight=0)
@@ -43,6 +46,9 @@ class JournalScreen(ctk.CTkFrame):
         self.entry_textbox = ctk.CTkTextbox(self.right_frame, width=200)
         self.entry_textbox.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
 
+        #Entry
+        self.load_entry(datetime.date.today().strftime("%Y-%m-%d"))
+
         #Left frame grid
         self.left_frame.grid_rowconfigure(0, weight=0)
         self.left_frame.grid_rowconfigure(1, weight=0)
@@ -50,34 +56,42 @@ class JournalScreen(ctk.CTkFrame):
         self.left_frame.grid_columnconfigure(0, weight=1)
 
         #Calendar
-        self.calendar_frame = ctk.CTkFrame(self.left_frame)
-        self.calendar_frame.grid(row=0, column=0, padx=5, pady=5)
-        month_name = datetime.date.today().strftime("%B")
-        ctk.CTkLabel(self.calendar_frame, text=month_name, font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=7, pady=5)
-        days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
-        for i, day in enumerate(days):
-            ctk.CTkLabel(self.calendar_frame, text=day, width=30).grid(row=1, column=i, padx=2)
-
-        #Days in the calendar
-        cal = calendar.monthcalendar(datetime.date.today().year, datetime.date.today().month)
-        today = datetime.date.today().day
-
-        for week_num, week in enumerate(cal):
-            for day_num, day in enumerate(week):
-                if day == 0:
-                    ctk.CTkLabel(self.calendar_frame, text="", width=30).grid(row=week_num+2, column=day_num, padx=1, pady=1)
-                elif day == today:
-                    ctk.CTkButton(self.calendar_frame, text=str(day), width=20, height=20, fg_color="#4EB121", corner_radius=20).grid(row=week_num+2, column=day_num, padx=1, pady=1)
-                else:
-                    ctk.CTkButton(self.calendar_frame, text=str(day), width=20, height=20, fg_color="transparent").grid(row=week_num+2, column=day_num, padx=1, pady=1)
-
+        self.calendar = CalendarWidget(self.left_frame, db, self.load_entry)
+        self.calendar.grid(row=0, column=0, padx=5, pady=5)
         
+        #Mood tracker
+        self.mood_frame = ctk.CTkFrame(self.left_frame)
+        self.mood_frame.grid(row=1, column=0, padx=5, pady=5)
+        ctk.CTkLabel(self.mood_frame, text="How do you feel today?", font=ctk.CTkFont(weight="bold")).pack(pady=5)
+
+        for mood, color in MOODS:
+            ctk.CTkButton(self.mood_frame, text=mood, fg_color=color, command=lambda m=mood: self.set_mood(m)).pack(pady=2)
+
 
     def open_themes(self):
         print("Themes clicked!")
 
     def save_entry(self):
-        print("Save clicked!")
+        date = datetime.date.today().strftime("%Y-%m-%d")
+        content = self.entry_textbox.get("1.0", "end-1c")
+        print(f"Saving: {date}, {content}")
+        #mood = self.current_mood if hasattr(self, "current_mood") else ""
+        self.db.save_entry(date, content, self.current_mood)
+        print("Entry saved!")
+
+    def load_entry(self, date):
+        result = self.db.get_entry(date)
+        self.entry_textbox.delete("1.0", "end")
+        if result:
+            content, mood = result
+            self.entry_textbox.insert("1.0", content)
+            self.current_mood = mood if mood else ""
 
     def toggle_calendar(self):
         print("Calendar clicked!")
+
+    def set_mood(self, mood):
+        self.current_mood = mood
+        print(f"Mood set: {mood}")
+
+    
