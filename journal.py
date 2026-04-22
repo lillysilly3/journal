@@ -9,7 +9,7 @@ class JournalScreen(ctk.CTkFrame):
         super().__init__(parent)
         self.db = db
         self.current_mood = ""
-
+        self.current_date = datetime.date.today().strftime("%Y-%m-%d")
 
         #Grid
         self.grid_columnconfigure(0, weight=0)
@@ -30,7 +30,6 @@ class JournalScreen(ctk.CTkFrame):
         #Top buttons
         ctk.CTkButton(self.top_frame, text="Themes", command=self.open_themes).pack(side="left", padx=10, pady=10)
         ctk.CTkButton(self.top_frame, text="Save", command=self.save_entry).pack(side="left", padx=10, pady=10)
-        ctk.CTkButton(self.top_frame, text="Calendar", command=self.toggle_calendar).pack(side="left", padx=10, pady=10)
 
         #Right frame grid
         self.right_frame.grid_columnconfigure(0, weight=1)
@@ -41,6 +40,7 @@ class JournalScreen(ctk.CTkFrame):
         today = datetime.date.today().strftime("%Y %B %d")
         self.date_label = ctk.CTkLabel(self.right_frame, text=today, font=ctk.CTkFont(size=18, weight="bold"))
         self.date_label. grid(row=0, column=0, sticky="w", padx=10, pady=10)
+        
 
         #Textbox
         self.entry_textbox = ctk.CTkTextbox(self.right_frame, width=200)
@@ -65,30 +65,37 @@ class JournalScreen(ctk.CTkFrame):
         ctk.CTkLabel(self.mood_frame, text="How do you feel today?", font=ctk.CTkFont(weight="bold")).pack(pady=5)
 
         for mood, color in MOODS:
-            ctk.CTkButton(self.mood_frame, text=mood, fg_color=color, command=lambda m=mood: self.set_mood(m)).pack(pady=2)
+            ctk.CTkButton(self.mood_frame, text=mood, fg_color=color, width=160, command=lambda m=mood: self.set_mood(m)).pack(pady=2)
 
 
     def open_themes(self):
         print("Themes clicked!")
 
     def save_entry(self):
-        date = datetime.date.today().strftime("%Y-%m-%d")
+        date = self.current_date
         content = self.entry_textbox.get("1.0", "end-1c")
         print(f"Saving: {date}, {content}")
-        #mood = self.current_mood if hasattr(self, "current_mood") else ""
         self.db.save_entry(date, content, self.current_mood)
+        self.calendar.month_cache.clear()
+        self.calendar.build_calendar()
+        self.load_entry(date)
         print("Entry saved!")
 
     def load_entry(self, date):
+        self.current_date = date
+        print(f"Loading entry for: {date}")
         result = self.db.get_entry(date)
+        print(f"Result: {result}")
         self.entry_textbox.delete("1.0", "end")
         if result:
             content, mood = result
             self.entry_textbox.insert("1.0", content)
             self.current_mood = mood if mood else ""
-
-    def toggle_calendar(self):
-        print("Calendar clicked!")
+        else:
+            self.current_mood = ""
+        mood_emoji = self.current_mood.split()[0] if self.current_mood else ""
+        display_date = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%Y %B %d")
+        self.date_label.configure(text=f"{display_date} {mood_emoji}")
 
     def set_mood(self, mood):
         self.current_mood = mood

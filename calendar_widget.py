@@ -12,12 +12,19 @@ class CalendarWidget(ctk.CTkFrame):
         self.on_day_select = on_day_select
         self.current_year = datetime.date.today().year
         self.current_month = datetime.date.today().month
+        self.month_cache = {}
         self.build_calendar()        
 
+    
     def build_calendar(self):
         print("Building calendar...")
         for widget in self.winfo_children():
             widget.destroy()
+        cache_key = f"{self.current_year}-{self.current_month}"
+        if cache_key not in self.month_cache:
+            self.month_cache[cache_key] = self.db.get_entries_for_month(self.current_year, self.current_month)
+        month_entries = self.month_cache[cache_key]
+        print(f"Month entries: {month_entries}")
 
         #Navigation for calendar
         nav_frame = ctk.CTkFrame(self)
@@ -35,27 +42,24 @@ class CalendarWidget(ctk.CTkFrame):
         today_date = datetime.date.today()
         today = today_date.day if (self.current_year == today_date.year and self.current_month == today_date.month) else -1
 
+        
         for week_num, week in enumerate(cal):
             for day_num, day in enumerate(week):
                 if day == 0:
                     ctk.CTkLabel(self, text="", width=30).grid(row=week_num+2, column=day_num, padx=1, pady=1)
                 else:
                     date_str = f"{self.current_year}-{self.current_month:02d}-{day:02d}"
+                    entry_data = month_entries.get(date_str)
+                    mood = entry_data[1] if entry_data else None
+                    color = MOOD_COLORS.get(mood, "transparent") if mood else "transparent"
                     if day == today:
-                        ctk.CTkButton(self, text=str(day), width=20, height=20, fg_color="#755CE4", corner_radius=20, 
-                                    command=lambda d=date_str: self.on_day_select(d)).grid(row=week_num+2, column=day_num, padx=1, pady=1)
+                        ctk.CTkButton(self, text=str(day), width=20, height=20, fg_color=color, corner_radius=20,
+                        border_width=2, border_color="#755CE4", 
+                        command=lambda d=date_str: self.on_day_select(d)).grid(row=week_num+2, column=day_num, padx=1, pady=1)
                     else:
-                        result = self.db.get_entry(date_str)
-                        if result:
-                            _, mood = result
-                            color = MOOD_COLORS.get(mood, "transparent")
-                            border = 0 if mood else 2
-                        else:
-                            color = "transparent"
-                            border = 0
+                        border = 2 if (entry_data and not mood) else 0
                         ctk.CTkButton(self, text=str(day), width=20, height=20, fg_color=color, border_width=border, 
-                                      command=lambda d=date_str: self.on_day_select(d)).grid(row=week_num+2, column=day_num, padx=1, pady=1)
-                                                
+                        command=lambda d=date_str: self.on_day_select(d)).grid(row=week_num+2, column=day_num, padx=1, pady=1)          
                     
     def prev_month(self):
         if self.current_month == 1:

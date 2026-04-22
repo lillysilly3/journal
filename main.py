@@ -59,9 +59,6 @@ else:
     
 app.mainloop()
 
-# TODO: revisit calendar behavior - past entries read only or editable?
-# TODO: future dates not clickable
-# TODO: month/year navigation arrows
-# TODO: setting mood on calendar with collor
-# TODO: figure it our how to make visible entry dates and make less visible no entry dates
-# TODO: show which mood was chosen
+# TODO: themes
+
+
