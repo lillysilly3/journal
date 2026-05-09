@@ -84,4 +84,5 @@ journal/
 - Wallpaper customization
 - Settings menu (change password, toggle mood tracker, customization)
 - Search through entries by keyword
+- Auto update after release
 

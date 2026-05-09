@@ -14,16 +14,19 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install pyinstaller customtkinter bcrypt
+        run: pip install -r requirements.txt pyinstaller
       - name: Build
         run: pyinstaller --onefile --windowed main.py
       - name: Rename
-        run: mv dist/main dist/Journal-linux
+        run: mv dist/main dist/Journal
+      - name: Zip with install script
+        run: zip Journal-linux.zip dist/Journal install.sh
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Journal-linux
-          path: dist/Journal-linux
+          path: Journal-linux.zip
+
 
   build-windows:
     runs-on: windows-latest
@@ -33,7 +36,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install pyinstaller customtkinter bcrypt
+        run: pip install -r requirements.txt pyinstaller
       - name: Build
         run: pyinstaller --onefile --windowed main.py
       - name: Upload artifact
@@ -41,6 +44,7 @@ jobs:
         with:
           name: Journal-windows
           path: dist/main.exe
+
 
   build-macos:
     runs-on: macos-latest
@@ -50,7 +54,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install dependencies
-        run: pip install pyinstaller customtkinter bcrypt
+        run: pip install -r requirements.txt pyinstaller
       - name: Build
         run: pyinstaller --onefile --windowed main.py
       - name: Rename
@@ -58,5 +62,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Journal-mac
+          name: Journal-macos
           path: dist/Journal-macos

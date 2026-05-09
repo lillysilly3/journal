@@ -4,7 +4,7 @@ echo "Installing Journal App..."
 
 # Copy executable to local bin
 mkdir -p ~/.local/bin
-cp dist/Journal ~/.local/bin/Journal
+cp Journal ~/.local/bin/Journal
 chmod +x ~/.local/bin/Journal
 
 # Create desktop entry
@@ -20,3 +20,6 @@ Categories=Utility;
 DESKTOP
 
 echo "Done! Journal app installed. Look for it in your app menu!"
+echo ""
+echo "Note for developers: to run from source install dependencies with:"
+echo "pip install -r requirements.txt"
