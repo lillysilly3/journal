@@ -1,0 +1,62 @@
+name: Build Journal App
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pyinstaller customtkinter bcrypt
+      - name: Build
+        run: pyinstaller --onefile --windowed main.py
+      - name: Rename
+        run: mv dist/main dist/Journal-linux
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Journal-linux
+          path: dist/Journal-linux
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pyinstaller customtkinter bcrypt
+      - name: Build
+        run: pyinstaller --onefile --windowed main.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Journal-windows
+          path: dist/main.exe
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pyinstaller customtkinter bcrypt
+      - name: Build
+        run: pyinstaller --onefile --windowed main.py
+      - name: Rename
+        run: mv dist/main dist/Journal-macos
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Journal-macos
+          path: dist/Journal-macos
