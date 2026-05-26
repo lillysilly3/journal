@@ -4,6 +4,8 @@ A personal desktop journal application built with Python and CustomTkinter. Writ
 
 ---
 
+![Journal screenshot 3](/assets/journal3.png)
+
 ## Features
 
 - **Password protected** — secure login with bcrypt hashing and a password hint system
@@ -14,6 +16,10 @@ A personal desktop journal application built with Python and CustomTkinter. Writ
 - **Entry indicators** — days with entries are visually distinct from empty days
 - **Selected day highlight** — always know which day you are viewing
 - **Password reset** — use hint button for a previously set hint or reset password resetting all entries together
+
+![Journal screenshot 1](/assets/journal1.png)
+
+![Journal screenshot 2](/assets/journal2.png)
 
 ---
 
