@@ -1,9 +1,9 @@
 import customtkinter as ctk
 import datetime
 import calendar
-from database import DatabaseClient
-from moods import MOOD_COLORS
-from theme import COLORS
+from app.utils.database import DatabaseClient
+from app.components.moods import MOOD_COLORS
+from app.utils.theme import COLORS
 
 
 class CalendarWidget(ctk.CTkFrame):

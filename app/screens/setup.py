@@ -1,6 +1,6 @@
 import customtkinter as ctk
-from database import DatabaseClient
-from theme import COLORS
+from app.utils.database import DatabaseClient
+from app.utils.theme import COLORS
 
 class SetupScreen(ctk.CTkFrame):
     def __init__(self, parent, on_setup_complete, db: DatabaseClient):

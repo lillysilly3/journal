@@ -10,10 +10,10 @@ A personal desktop journal application built with Python and CustomTkinter. Writ
 - **Daily entries** — write journal entries for any day, with auto-refresh after saving
 - **Mood tracking** — tag each entry with a mood (Happy, Neutral, Sad, Angry, Tired, Energetic)
 - **Mood calendar** — each day is color coded by mood
-- **Calendar navigation** — browse any month and year to find past entries (for now and future 😅)
+- **Calendar navigation** — browse any month and year to find past entries 
 - **Entry indicators** — days with entries are visually distinct from empty days
 - **Selected day highlight** — always know which day you are viewing
-- **Password reset** — use hint button for a previously set hint or reset password resetting all entries together (ultra safety 😅)
+- **Password reset** — use hint button for a previously set hint or reset password resetting all entries together
 
 ---
 
@@ -61,15 +61,22 @@ On first launch you will be prompted to create a password. After that you can lo
 
 ```
 journal/
-├── main.py            # App entry point, screen switching logic
-├── login.py           # Login screen
-├── setup.py           # First time password setup screen
-├── journal.py         # Main journal screen
-├── calendar_widget.py # Calendar component
-├── database.py        # Database client (SQLite)
-├── moods.py           # Mood definitions and colors
-├── theme.py           # App color theme
-└── assets/            # Reserved for future assets
+├── main.py                    # App entry point
+├── app/
+│   ├── screens/
+│   │   ├── login.py           # Login screen
+│   │   ├── setup.py           # Password setup screen
+│   │   └── journal.py         # Main journal screen
+│   ├── components/
+│   │   ├── calendar_widget.py # Calendar component
+│   │   └── moods.py           # Mood definitions
+│   └── utils/
+│       ├── database.py        # SQLite database client
+│       └── theme.py           # App color theme
+├── assets/                    # Reserved for future assets
+├── requirements.txt
+├── LICENSE
+└── .gitignore
 ```
 
 ---

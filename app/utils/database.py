@@ -2,7 +2,7 @@ import sqlite3
 import bcrypt
 import os
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "journal.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "journal.db")
 
 class DatabaseClient():
     def __init__(self):

@@ -1,9 +1,9 @@
 import customtkinter as ctk
 import datetime
-from database import DatabaseClient
-from calendar_widget import CalendarWidget
-from moods import MOODS, MOOD_COLORS
-from theme import COLORS
+from app.utils.database import DatabaseClient
+from app.components.calendar_widget import CalendarWidget
+from app.components.moods import MOODS, MOOD_COLORS
+from app.utils.theme import COLORS
 
 class JournalScreen(ctk.CTkFrame):
     def __init__(self, parent, db: DatabaseClient, fg_color=COLORS["frame"]):

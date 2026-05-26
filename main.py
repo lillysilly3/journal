@@ -1,9 +1,9 @@
 import customtkinter as ctk
-from login import LoginScreen
-from database import DatabaseClient
-from setup import SetupScreen
-from journal import JournalScreen
-from theme import COLORS
+from app.screens.login import LoginScreen
+from app.screens.setup import SetupScreen
+from app.screens.journal import JournalScreen
+from app.utils.database import DatabaseClient
+from app.utils.theme import COLORS
 
 def on_login_success():
     print("logged in!")
