@@ -1,10 +1,10 @@
-# 📓 Journal App
+# Journal App
 
 A personal desktop journal application built with Python and CustomTkinter. Write daily entries, track your mood, and navigate your past through a built-in calendar.
 
 ---
 
-## ✨ Features
+## Features
 
 - **Password protected** — secure login with bcrypt hashing and a password hint system
 - **Daily entries** — write journal entries for any day, with auto-refresh after saving
@@ -17,7 +17,7 @@ A personal desktop journal application built with Python and CustomTkinter. Writ
 
 ---
 
-## 🧠 What I Learned Building This
+## What I Learned Building This
 
 This was my first real Python project after completing the Boot.dev Python and many other courses. Here is what I had an opportunity to do more of:
 
@@ -33,12 +33,7 @@ This was my first real Python project after completing the Boot.dev Python and m
 
 ---
 
-## 🛠️ Installation
-
-### Requirements
-
-- Python 3.10+
-- pip
+## Installation
 
 ### Steps
 
@@ -62,7 +57,7 @@ On first launch you will be prompted to create a password. After that you can lo
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 journal/
@@ -79,7 +74,7 @@ journal/
 
 ---
 
-## 🔮 Future Ideas
+## Future Ideas
 
 - Wallpaper customization
 - Settings menu (change password, toggle mood tracker, customization)
