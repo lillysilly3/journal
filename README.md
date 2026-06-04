@@ -23,7 +23,7 @@ A personal desktop journal application built with Python and CustomTkinter. Writ
 
 ---
 
-## What I Learned Building This
+## What I Explored Building This
 
 This was my first real Python project after completing the Boot.dev Python and many other courses. Here is what I had an opportunity to do more of:
 
@@ -39,6 +39,11 @@ This was my first real Python project after completing the Boot.dev Python and m
 
 ---
 
+## Prerequisites
+
+- Python 3.x+
+- pip
+
 ## Installation
 
 ### Steps
@@ -51,7 +56,7 @@ cd journal
 
 2. Install dependencies:
 ```bash
-pip install customtkinter bcrypt
+pip install -r requirements.txt
 ```
 
 3. Run the app:
